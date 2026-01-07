@@ -1,50 +1,41 @@
-import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { MapView } from './pages/MapView';
 import { Dashboard } from './pages/Dashboard';
 import { Sensors } from './pages/Sensors';
 import { Machines } from './pages/Machines';
+import { useEffect } from 'react';
 
-type Page = 'map' | 'dashboard' | 'sensores' | 'maquinas';
+// Componente auxiliar para expor a navegação globalmente (mantendo compatibilidade)
+function NavigationExposer() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    (window as any).navigateTo = (page: string) => {
+      const path = page === 'dashboard' ? '/' : `/${page}`;
+      navigate(path);
+    };
+  }, [navigate]);
+
+  return null;
+}
 
 function App() {
-  // Verifica URL para determinar página inicial
-  const getInitialPage = (): Page => {
-    const path = window.location.pathname;
-    if (path === '/sensores') return 'sensores';
-    if (path === '/maquinas') return 'maquinas';
-    if (path === '/map' || path === '/mapa') return 'map';
-    return 'dashboard';
-  };
+  // O basename deve corresponder ao caminho do repositório no GitHub Pages
+  // Em desenvolvimento (localhost) é '/', em produção é '/Terris25/'
+  const basename = import.meta.env.PROD ? '/Terris25' : '/';
 
-  const [currentPage, setCurrentPage] = useState<Page>(getInitialPage());
-
-  // Atualiza URL quando muda de página
-  const navigateTo = (page: Page) => {
-    setCurrentPage(page);
-    const paths: Record<Page, string> = {
-      dashboard: '/',
-      map: '/map',
-      sensores: '/sensores',
-      maquinas: '/maquinas',
-    };
-    window.history.pushState({}, '', paths[page]);
-  };
-
-  // Expõe função de navegação globalmente
-  (window as any).navigateTo = navigateTo;
-
-  switch (currentPage) {
-    case 'dashboard':
-      return <Dashboard />;
-    case 'map':
-      return <MapView />;
-    case 'sensores':
-      return <Sensors />;
-    case 'maquinas':
-      return <Machines />;
-    default:
-      return <Dashboard />;
-  }
+  return (
+    <Router basename={basename}>
+      <NavigationExposer />
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/map" element={<MapView />} />
+        <Route path="/sensores" element={<Sensors />} />
+        <Route path="/maquinas" element={<Machines />} />
+        <Route path="*" element={<Dashboard />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
