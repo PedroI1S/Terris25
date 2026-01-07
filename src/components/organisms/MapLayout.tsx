@@ -6,6 +6,9 @@ import type { Talhao } from '../../types';
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
 // Validar token do Mapbox
+console.log('🔑 Mapbox Token check:', MAPBOX_TOKEN ? 'Found (Starts with ' + MAPBOX_TOKEN.substring(0, 4) + ')' : 'Missing/Empty');
+console.log('🌍 Environment:', import.meta.env);
+
 if (!MAPBOX_TOKEN) {
   console.error('❌ Token do Mapbox não encontrado. Configure VITE_MAPBOX_ACCESS_TOKEN no arquivo .env');
 }
@@ -43,9 +46,9 @@ export function MapLayout({
           </p>
           <p className="text-sm text-neutral-600">
             Obtenha seu token em:{' '}
-            <a 
-              href="https://account.mapbox.com/access-tokens/" 
-              target="_blank" 
+            <a
+              href="https://account.mapbox.com/access-tokens/"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-primary-600 hover:underline"
             >
@@ -62,19 +65,19 @@ export function MapLayout({
     console.log('🗺️ useEffect de inicialização do mapa disparado');
     console.log('   mapContainer.current:', mapContainer.current);
     console.log('   map.current:', map.current);
-    
+
     if (!mapContainer.current) {
       console.log('⚠️ Pulando: mapContainer não existe');
       return;
     }
-    
+
     if (map.current) {
       console.log('⚠️ Pulando: mapa já existe');
       return;
     }
 
     console.log('✨ Iniciando criação do mapa Mapbox...');
-    
+
     try {
       const mapInstance = new mapboxgl.Map({
         container: mapContainer.current,
@@ -82,7 +85,7 @@ export function MapLayout({
         center: center,
         zoom: zoom,
       });
-      
+
       map.current = mapInstance;
       console.log('✅ Mapa Mapbox criado:', map.current);
 
@@ -270,12 +273,12 @@ export function MapLayout({
 
   return (
     <div className="relative w-full h-full min-h-[600px]" style={{ width: '100%', height: '100%' }}>
-      <div 
-        ref={mapContainer} 
-        className="absolute inset-0 rounded-lg overflow-hidden" 
+      <div
+        ref={mapContainer}
+        className="absolute inset-0 rounded-lg overflow-hidden"
         style={{ width: '100%', height: '100%', minHeight: '600px' }}
       />
-      
+
       {!mapLoaded && !error && (
         <div className="absolute inset-0 flex items-center justify-center bg-neutral-100 rounded-lg">
           <div className="text-center">
@@ -292,8 +295,8 @@ export function MapLayout({
               ❌ Erro ao carregar o mapa
             </h3>
             <p className="text-neutral-700 mb-4">{error}</p>
-            <button 
-              onClick={() => window.location.reload()} 
+            <button
+              onClick={() => window.location.reload()}
               className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
             >
               Recarregar página
