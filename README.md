@@ -1,4 +1,5 @@
-# Terris — Interface do Agricultor# React + TypeScript + Vite
+# Terris — Interface do Agricultor
+# React + TypeScript + Vite
 
 
 
