@@ -10,9 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Debug Secret Availability
+        run: |
+          if [ -z "${{ secrets.VITE_MAPBOX_ACCESS_TOKEN || secrets.MAPBOX_ACCESS_TOKEN }}" ]; then
+            echo "::error::MAPBOX SECRET IS NOT SET OR IS EMPTY!"
+          else
+            echo "::notice::MAPBOX SECRET IS FOUND (First 4 chars: $(echo ${{ secrets.VITE_MAPBOX_ACCESS_TOKEN || secrets.MAPBOX_ACCESS_TOKEN }} | cut -c1-4))"
+          fi
 
       - name: Set up Node
         uses: actions/setup-node@v4
