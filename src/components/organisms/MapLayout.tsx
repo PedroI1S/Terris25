@@ -6,9 +6,6 @@ import type { Talhao } from '../../types';
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
 // Validar token do Mapbox
-console.log('🔑 Mapbox Token check:', MAPBOX_TOKEN ? 'Found (Starts with ' + MAPBOX_TOKEN.substring(0, 4) + ')' : 'Missing/Empty');
-console.log('🌍 Environment:', import.meta.env);
-
 if (!MAPBOX_TOKEN) {
   console.error('❌ Token do Mapbox não encontrado. Configure VITE_MAPBOX_ACCESS_TOKEN no arquivo .env');
 }
